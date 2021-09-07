@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "523648828631",
+    "firebase_url": "https://spring-cab-297205.firebaseio.com",
+    "project_id": "spring-cab-297205",
+    "storage_bucket": "spring-cab-297205.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523648828631:android:de1c80d279699891ed1c92",
+        "android_client_info": {
+          "package_name": "com.wala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523648828631-pdc214qhd3hq2pqt4p1e3o563idrpf7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-YowPD0AhrdURDlk5rNj1sxnqLE_Q1wo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523648828631-pdc214qhd3hq2pqt4p1e3o563idrpf7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523648828631:android:c20c86ae2c185d5aed1c92",
+        "android_client_info": {
+          "package_name": "com.winlifeapp.conselor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523648828631-i0cmml5rq6pna412qrfge0i97c35515j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.winlifeapp.conselor",
+            "certificate_hash": "3c375409f2945e1017460dfdc5d56ab834688dc5"
+          }
+        },
+        {
+          "client_id": "523648828631-pdc214qhd3hq2pqt4p1e3o563idrpf7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-YowPD0AhrdURDlk5rNj1sxnqLE_Q1wo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523648828631-pdc214qhd3hq2pqt4p1e3o563idrpf7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523648828631:android:1755f966c90b4fc9ed1c92",
+        "android_client_info": {
+          "package_name": "com.winlifeapp.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523648828631-sgk0q1qpfirltnjrhftfnim8r0utgar9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.winlifeapp.user",
+            "certificate_hash": "3c375409f2945e1017460dfdc5d56ab834688dc5"
+          }
+        },
+        {
+          "client_id": "523648828631-pdc214qhd3hq2pqt4p1e3o563idrpf7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-YowPD0AhrdURDlk5rNj1sxnqLE_Q1wo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523648828631-pdc214qhd3hq2pqt4p1e3o563idrpf7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
