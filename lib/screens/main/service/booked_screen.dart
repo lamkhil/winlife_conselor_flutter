@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:convert' as convert;
+
+import 'package:winlife_conselor_flutter/constant/color.dart';
+import 'package:winlife_conselor_flutter/controller/chat_controller.dart';
+import 'package:winlife_conselor_flutter/controller/quickblox_controller.dart';
+import 'package:winlife_conselor_flutter/controller/rtc_controller.dart';
+import 'package:winlife_conselor_flutter/data/provider/FCM.dart';
+import 'package:winlife_conselor_flutter/routes/app_routes.dart';
 
 class BookedScreen extends StatefulWidget {
   const BookedScreen({Key? key}) : super(key: key);
@@ -8,8 +17,28 @@ class BookedScreen extends StatefulWidget {
 }
 
 class _BookedScreenState extends State<BookedScreen> {
+  var args = Get.arguments;
+  late var user;
+  late var time;
+
+  QBController _qbController = Get.find();
+  late ChatController _chatController;
+  late RTCController _rtcController;
+
+  @override
+  void initState() {
+    if (args['type'].toString().toLowerCase() == 'chat') {
+      _chatController = Get.find();
+    } else {
+      _rtcController = Get.find();
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    user = convert.jsonDecode(args['user']);
+    time = convert.jsonDecode(args['time']);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -32,14 +61,14 @@ class _BookedScreenState extends State<BookedScreen> {
                           children: [
                             Container(
                                 child: Text(
-                              "Congratulations!",
+                              "Order Incoming!",
                               style: TextStyle(
                                   fontFamily: 'neosansbold', fontSize: 24),
                             )),
                             Container(
                                 padding: const EdgeInsets.all(10),
                                 child: Text(
-                                  "Order Incoming",
+                                  "Status : Paid",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontFamily: 'muli', fontSize: 18),
@@ -84,7 +113,7 @@ class _BookedScreenState extends State<BookedScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text("Customer Name",
+                                      Text(user['full_name'],
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'neosansbold',
@@ -93,7 +122,7 @@ class _BookedScreenState extends State<BookedScreen> {
                                       Container(
                                         margin: const EdgeInsets.only(top: 4),
                                         child: Text(
-                                          "DKI Jakarta, Kembangan ",
+                                          user['email'],
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -144,7 +173,7 @@ class _BookedScreenState extends State<BookedScreen> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    "type_consultaion",
+                                    args['type'],
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
                                         fontFamily: 'muli', fontSize: 15),
@@ -169,51 +198,7 @@ class _BookedScreenState extends State<BookedScreen> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        "time",
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                            fontFamily: 'muli', fontSize: 15),
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                            Container(
-                                margin: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        "Waktu Mulai ",
-                                        style: TextStyle(
-                                            fontFamily: 'neosansbold',
-                                            fontSize: 15),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "--",
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                            fontFamily: 'muli', fontSize: 15),
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                            Container(
-                                margin: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        "Waktu Selesai ",
-                                        style: TextStyle(
-                                            fontFamily: 'neosansbold',
-                                            fontSize: 15),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "--",
+                                        time['time'],
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                             fontFamily: 'muli', fontSize: 15),
@@ -255,7 +240,7 @@ class _BookedScreenState extends State<BookedScreen> {
                                       Container(
                                         padding: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          "price",
+                                          "90.000",
                                           textAlign: TextAlign.right,
                                           style: TextStyle(
                                               fontFamily: 'muli', fontSize: 15),
@@ -266,6 +251,62 @@ class _BookedScreenState extends State<BookedScreen> {
                                 ),
                               ],
                             )),
+                            InkWell(
+                              onTap: () async {
+                                switch (args['type'].toString().toLowerCase()) {
+                                  case 'chat':
+                                    await _chatController.createDialog(
+                                        int.parse(args['qb'].toString()));
+                                    Map<String, dynamic> data = {
+                                      'dialogId': _chatController.dialog!.id!,
+                                    };
+                                    FCM.send(args['fcm'], data);
+                                    Get.toNamed(Routes.CHATSCREEN,
+                                        arguments: {'user': user});
+                                    break;
+                                  case 'call':
+                                    break;
+                                  case 'vidcall':
+                                    break;
+                                  default:
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        spreadRadius: 0.8,
+                                        blurRadius: 5,
+                                        offset: Offset(
+                                            2, 5), // changes position of shadow
+                                      ),
+                                    ],
+                                    color: mainColor,
+                                    border: Border.all(
+                                      color: mainColor,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                padding: const EdgeInsets.all(13),
+                                margin:
+                                    const EdgeInsets.only(top: 20, bottom: 20),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Mulai Konsultasi",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily: 'neosansbold',
+                                            fontSize: 16,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ]),
                     ),
                   ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:email_auth/email_auth.dart';
 import 'package:winlife_conselor_flutter/constant/color.dart';
 import 'package:winlife_conselor_flutter/data/model/user_model.dart';
+import 'package:winlife_conselor_flutter/data/provider/FCM.dart';
 import 'package:winlife_conselor_flutter/data/provider/http_service.dart';
 import 'package:winlife_conselor_flutter/routes/app_routes.dart';
 import 'package:winlife_conselor_flutter/screens/widget/dialog.dart';
@@ -18,7 +21,14 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+  }
+
   var selectIndexLang = 0.obs;
+
   final storage = GetStorage();
   final _user = Rx<UserData>(UserData.initial());
   UserData get user => _user.value;
@@ -97,10 +107,10 @@ class AuthController extends GetxController {
         "Please Wait");
     var result = await HttpService.login(email, password);
     if (result['status']) {
-      Navigator.pop(Get.overlayContext!);
       user = UserData.fromJson(result['data'], result['token']);
       await storage.write('user', user);
       await storage.write('login', {'email': email, 'password': password});
+      await socialSignIn(user.uid, user.fullName, user.email);
       Get.offAllNamed(Routes.MAIN);
     } else {
       Navigator.pop(Get.overlayContext!);
@@ -109,7 +119,7 @@ class AuthController extends GetxController {
   }
 
   socialSignIn(String user, String name, String email) async {
-    await FirebaseFirestore.instance.collection("conselors").doc(user).set({
+    await FirebaseFirestore.instance.collection("conselors").doc(email).set({
       'nama': name,
       'email': email,
     });

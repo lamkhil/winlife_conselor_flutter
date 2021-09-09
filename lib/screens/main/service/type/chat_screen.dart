@@ -5,38 +5,38 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:uuid/uuid.dart';
 import 'package:winlife_conselor_flutter/constant/color.dart';
+import 'package:winlife_conselor_flutter/controller/auth_controller.dart';
+import 'package:winlife_conselor_flutter/controller/chat_controller.dart';
+import 'package:winlife_conselor_flutter/data/model/user_model.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ChatPage(),
-    );
-  }
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
-class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
-
-  @override
-  _ChatPageState createState() => _ChatPageState();
-}
-
-class _ChatPageState extends State<ChatPage> {
+class _ChatScreenState extends State<ChatScreen> {
   List<types.Message> _messages = [];
-  final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
+  final AuthController _authController = Get.find();
+  var _user;
+  late UserData opponent;
+  var args = Get.arguments;
+  final ChatController _chatController = Get.find();
 
   @override
   void initState() {
     super.initState();
     _loadMessages();
+    _user = types.User(
+        id: _authController.user.id, firstName: _authController.user.fullName);
+    opponent = UserData.fromJson(args['user'], "  ");
   }
 
   void _addMessage(types.Message message) {
@@ -163,7 +163,7 @@ class _ChatPageState extends State<ChatPage> {
       id: const Uuid().v4(),
       text: message.text,
     );
-
+    _chatController.sendMessage(message.text);
     _addMessage(textMessage);
   }
 
@@ -197,7 +197,7 @@ class _ChatPageState extends State<ChatPage> {
               ),
               Expanded(
                 child: Text(
-                  'Robby Christhin',
+                  opponent.fullName,
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'neosansbold',

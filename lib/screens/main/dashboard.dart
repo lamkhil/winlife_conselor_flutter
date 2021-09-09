@@ -12,7 +12,6 @@ import 'package:winlife_conselor_flutter/screens/main/Frame/home.dart';
 import 'package:winlife_conselor_flutter/screens/main/Frame/profil.dart';
 import 'package:winlife_conselor_flutter/screens/main/Frame/promo.dart';
 import 'package:winlife_conselor_flutter/screens/main/Frame/quick.dart';
-import 'package:winlife_conselor_flutter/screens/widget/dialog.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -33,18 +32,35 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final AuthController _authController = Get.find();
 
-  StreamSubscription<RemoteMessage>? onMessegeSub;
+  late StreamSubscription<RemoteMessage> onMessegeSub;
+  late StreamSubscription<RemoteMessage> onMessegeOpenedAppSub;
 
   @override
   void initState() {
-    fcmInit();
     onMessegeSub = FCM.onMessage.listen((RemoteMessage message) {
-      switch (message.data['type']) {
+      print(message.data);
+      switch (message.data['type'].toString().toLowerCase()) {
         case 'chat':
-          Get.toNamed(Routes.BOOKEDSCREENCHAT);
+          Get.toNamed(Routes.BOOKEDSCREENCHAT, arguments: message.data);
           break;
         case 'call':
-          Get.toNamed(Routes.BOOKEDSCREENCALL);
+          Get.toNamed(Routes.BOOKEDSCREENCALL, arguments: message.data);
+          break;
+        case 'vidcall':
+          break;
+        case 'meet':
+          break;
+        default:
+      }
+    });
+    onMessegeOpenedAppSub = FCM.onMessage.listen((RemoteMessage message) {
+      print(message.data);
+      switch (message.data['type'].toString().toLowerCase()) {
+        case 'chat':
+          Get.toNamed(Routes.BOOKEDSCREENCHAT, arguments: message.data);
+          break;
+        case 'call':
+          Get.toNamed(Routes.BOOKEDSCREENCALL, arguments: message.data);
           break;
         case 'vidcall':
           break;
@@ -56,18 +72,10 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
   }
 
-  fcmInit() async {
-    String? token = await FCM.messaging.getToken();
-    await FCM.saveTokenToDatabase(token!, _authController.user.email);
-    FCM.messaging.onTokenRefresh.listen((event) {
-      FCM.saveTokenToDatabase(event, _authController.user.email);
-    });
-  }
-
   @override
   void dispose() {
-    // TODO: implement dispose
-    onMessegeSub!.cancel();
+    onMessegeSub.cancel();
+    onMessegeOpenedAppSub.cancel();
     super.dispose();
   }
 

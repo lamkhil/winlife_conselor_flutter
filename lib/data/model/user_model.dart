@@ -38,7 +38,7 @@ class UserData {
         email: json['email'],
         fullName: json['full_name'],
         username: json['username'],
-        avatar: json['avatar'],
+        avatar: "json['avatar']",
         token: token);
   }
 

@@ -212,7 +212,7 @@ class _RegisterSocialPageState extends State<RegisterSocialPage> {
                                       await _authController.socialSignIn(
                                           args['user'],
                                           args['name'],
-                                          args['name']);
+                                          args['email']);
                                       await _authController.register(
                                           context,
                                           args['name'],

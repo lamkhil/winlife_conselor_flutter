@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:winlife_conselor_flutter/bindings/chat_bindings.dart';
 import 'package:winlife_conselor_flutter/bindings/main_binding.dart';
+import 'package:winlife_conselor_flutter/bindings/quickblox_binding.dart';
 import 'package:winlife_conselor_flutter/bindings/rtc_binding.dart';
 import 'package:winlife_conselor_flutter/routes/app_routes.dart';
 import 'package:winlife_conselor_flutter/screens/auth/landingpage.dart';
@@ -50,7 +51,7 @@ class AppPages {
     GetPage(
         name: Routes.MAIN,
         page: () => DashboardPage(),
-        binding: MainBindings()),
+        bindings: [MainBindings(), QBBindings()]),
     GetPage(name: Routes.WEBVIEW, page: () => WebViewPage()),
     GetPage(
         name: Routes.BOOKEDSCREENCALL,
