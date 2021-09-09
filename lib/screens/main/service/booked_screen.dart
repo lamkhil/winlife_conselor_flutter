@@ -269,14 +269,14 @@ class _BookedScreenState extends State<BookedScreen> {
                                     Get.toNamed(Routes.CHATSCREEN,
                                         arguments: {'user': user});
                                     break;
-                                  case 'call':
+                                  case 'phone':
                                     await _rtcController.callWebRTC(
                                         QBRTCSessionTypes.AUDIO,
                                         int.parse(args['qb'].toString()));
                                     Map<String, dynamic> data = {
                                       'type': args['type'],
-                                      'dialogId': _chatController.dialog!.id!,
-                                      'user': _authController.user.toJson()
+                                      'session': _rtcController.sessionId,
+                                      'user': _authController.user.toJson(),
                                     };
                                     FCM.send(args['fcm'], data);
                                     Get.toNamed(Routes.CALLSCREEN,

@@ -17,7 +17,7 @@ class RTCController extends GetxController {
   StreamSubscription? _peerConnectionSubscription;
 
   var vidiocall = false;
-  String? _sessionId;
+  String? sessionId;
 
   @override
   Future<void> onInit() async {
@@ -64,7 +64,7 @@ class RTCController extends GetxController {
           vidiocall = true;
         }
 
-        _sessionId = sessionId;
+        sessionId = sessionId;
         String messageCallType = vidiocall ? "Video" : "Audio";
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
@@ -73,7 +73,7 @@ class RTCController extends GetxController {
   Future<void> callWebRTC(int sessionType, int opponent) async {
     try {
       QBRTCSession? session = await QB.webrtc.call([opponent], sessionType);
-      _sessionId = session!.id;
+      sessionId = session!.id;
     } on PlatformException catch (e) {
       print(e);
     }
@@ -99,7 +99,7 @@ class RTCController extends GetxController {
 
   Future<void> hangUpWebRTC() async {
     try {
-      QBRTCSession? session = await QB.webrtc.hangUp(_sessionId!);
+      QBRTCSession? session = await QB.webrtc.hangUp(sessionId!);
       String? id = session!.id;
     } on PlatformException catch (e) {
       print(e);

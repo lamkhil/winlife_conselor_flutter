@@ -43,7 +43,7 @@ class _DashboardPageState extends State<DashboardPage> {
         case 'chat':
           Get.toNamed(Routes.BOOKEDSCREENCHAT, arguments: message.data);
           break;
-        case 'call':
+        case 'phone':
           Get.toNamed(Routes.BOOKEDSCREENCALL, arguments: message.data);
           break;
         case 'vidcall':
@@ -59,7 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
         case 'chat':
           Get.toNamed(Routes.BOOKEDSCREENCHAT, arguments: message.data);
           break;
-        case 'call':
+        case 'phone':
           Get.toNamed(Routes.BOOKEDSCREENCALL, arguments: message.data);
           break;
         case 'vidcall':
