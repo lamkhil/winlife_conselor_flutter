@@ -35,6 +35,8 @@ class ChatController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     await connect();
+    subscribeNewMessage();
+    subscribeSystemMessage();
   }
 
   @override
@@ -133,6 +135,9 @@ class ChatController extends GetxController {
           id: const Uuid().v4(),
           text: payload["body"],
         );
+        if (payload['senderId'] != _qbController.qbUser!.id) {
+          messages.insert(0, textMessage);
+        }
       }, onErrorMethod: (error) {
         print(error);
       });

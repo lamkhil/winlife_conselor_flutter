@@ -38,7 +38,7 @@ class UserData {
         email: json['email'],
         fullName: json['full_name'],
         username: json['username'],
-        avatar: "json['avatar']",
+        avatar: "https://picsum.photos/id/1005/367/267",
         token: token);
   }
 
@@ -49,6 +49,7 @@ class UserData {
         'email': email,
         'full_name': fullName,
         'username': username,
-        'token': token
+        'token': token,
+        'avatar': avatar
       };
 }

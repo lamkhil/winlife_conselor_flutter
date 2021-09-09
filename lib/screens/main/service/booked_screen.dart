@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickblox_sdk/webrtc/constants.dart';
 import 'dart:convert' as convert;
 
 import 'package:winlife_conselor_flutter/constant/color.dart';
+import 'package:winlife_conselor_flutter/controller/auth_controller.dart';
 import 'package:winlife_conselor_flutter/controller/chat_controller.dart';
 import 'package:winlife_conselor_flutter/controller/quickblox_controller.dart';
 import 'package:winlife_conselor_flutter/controller/rtc_controller.dart';
@@ -22,6 +24,7 @@ class _BookedScreenState extends State<BookedScreen> {
   late var time;
 
   QBController _qbController = Get.find();
+  AuthController _authController = Get.find();
   late ChatController _chatController;
   late RTCController _rtcController;
 
@@ -260,12 +263,24 @@ class _BookedScreenState extends State<BookedScreen> {
                                     Map<String, dynamic> data = {
                                       'type': args['type'],
                                       'dialogId': _chatController.dialog!.id!,
+                                      'user': _authController.user.toJson()
                                     };
                                     FCM.send(args['fcm'], data);
                                     Get.toNamed(Routes.CHATSCREEN,
                                         arguments: {'user': user});
                                     break;
                                   case 'call':
+                                    await _rtcController.callWebRTC(
+                                        QBRTCSessionTypes.AUDIO,
+                                        int.parse(args['qb'].toString()));
+                                    Map<String, dynamic> data = {
+                                      'type': args['type'],
+                                      'dialogId': _chatController.dialog!.id!,
+                                      'user': _authController.user.toJson()
+                                    };
+                                    FCM.send(args['fcm'], data);
+                                    Get.toNamed(Routes.CALLSCREEN,
+                                        arguments: {'user': user});
                                     break;
                                   case 'vidcall':
                                     break;
