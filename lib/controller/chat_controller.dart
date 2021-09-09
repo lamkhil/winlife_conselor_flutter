@@ -6,14 +6,18 @@ import 'package:quickblox_sdk/chat/constants.dart';
 import 'package:quickblox_sdk/models/qb_attachment.dart';
 import 'package:quickblox_sdk/models/qb_dialog.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:uuid/uuid.dart';
 import 'package:winlife_conselor_flutter/controller/auth_controller.dart';
 import 'package:winlife_conselor_flutter/controller/quickblox_controller.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:winlife_conselor_flutter/data/model/user_model.dart';
 
 class ChatController extends GetxController {
   final QBController _qbController = Get.find();
   final AuthController _authController = Get.find();
   QBDialog? dialog;
   String? _messageId;
+  Map<dynamic, dynamic> payload = {}.obs;
   StreamSubscription? _newMessageSubscription;
   StreamSubscription? _systemMessageSubscription;
   StreamSubscription? _deliveredMessageSubscription;
@@ -24,7 +28,9 @@ class ChatController extends GetxController {
   StreamSubscription? _connectionClosedSubscription;
   StreamSubscription? _reconnectionFailedSubscription;
   StreamSubscription? _reconnectionSuccessSubscription;
-
+  RxList<types.Message> messages = RxList<types.Message>();
+  UserData? opponent;
+  var opponentAuthor;
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -117,11 +123,16 @@ class ChatController extends GetxController {
       _newMessageSubscription = await QB.chat
           .subscribeChatEvent(QBChatEvents.RECEIVED_NEW_MESSAGE, (data) {
         Map<dynamic, dynamic> map = Map<dynamic, dynamic>.from(data);
-
-        Map<dynamic, dynamic> payload =
-            Map<dynamic, dynamic>.from(map["payload"]);
+        print(map);
+        payload = Map<dynamic, dynamic>.from(map["payload"]);
         _messageId = payload["id"] as String;
         print("Received message: \n ${payload["body"]}");
+        final textMessage = types.TextMessage(
+          author: opponentAuthor,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          id: const Uuid().v4(),
+          text: payload["body"],
+        );
       }, onErrorMethod: (error) {
         print(error);
       });

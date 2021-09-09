@@ -23,10 +23,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  List<types.Message> _messages = [];
   final AuthController _authController = Get.find();
   var _user;
-  late UserData opponent;
   var args = Get.arguments;
   final ChatController _chatController = Get.find();
 
@@ -36,12 +34,15 @@ class _ChatScreenState extends State<ChatScreen> {
     _loadMessages();
     _user = types.User(
         id: _authController.user.id, firstName: _authController.user.fullName);
-    opponent = UserData.fromJson(args['user'], "  ");
+    _chatController.opponent = UserData.fromJson(args['user'], "  ");
+    _chatController.opponentAuthor = types.User(
+        id: _chatController.opponent!.uid,
+        firstName: _chatController.opponent!.fullName);
   }
 
   void _addMessage(types.Message message) {
     setState(() {
-      _messages.insert(0, message);
+      _chatController.messages.insert(0, message);
     });
   }
 
@@ -146,12 +147,14 @@ class _ChatScreenState extends State<ChatScreen> {
     types.TextMessage message,
     types.PreviewData previewData,
   ) {
-    final index = _messages.indexWhere((element) => element.id == message.id);
-    final updatedMessage = _messages[index].copyWith(previewData: previewData);
+    final index = _chatController.messages
+        .indexWhere((element) => element.id == message.id);
+    final updatedMessage =
+        _chatController.messages[index].copyWith(previewData: previewData);
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       setState(() {
-        _messages[index] = updatedMessage;
+        _chatController.messages[index] = updatedMessage;
       });
     });
   }
@@ -197,7 +200,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               Expanded(
                 child: Text(
-                  opponent.fullName,
+                  _chatController.opponent!.fullName,
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'neosansbold',
@@ -230,7 +233,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           color: Colors.black,
                         ),
                         inputBackgroundColor: greyColor),
-                    messages: _messages,
+                    messages: _chatController.messages,
                     onAttachmentPressed: _handleAtachmentPressed,
                     onMessageTap: _handleMessageTap,
                     onPreviewDataFetched: _handlePreviewDataFetched,
