@@ -26,6 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final AuthController _authController = Get.find();
   var _user;
   var args = Get.arguments;
+  List<types.Message> _messages = [];
   final ChatController _chatController = Get.find();
 
   @override
@@ -38,12 +39,15 @@ class _ChatScreenState extends State<ChatScreen> {
     _chatController.opponentAuthor = types.User(
         id: _chatController.opponent!.uid,
         firstName: _chatController.opponent!.fullName);
+    _chatController.messages.listen((value) {
+      setState(() {
+        _messages = value;
+      });
+    });
   }
 
   void _addMessage(types.Message message) {
-    setState(() {
-      _chatController.messages.insert(0, message);
-    });
+    _chatController.messages.insert(0, message);
   }
 
   void _handleAtachmentPressed() {
@@ -153,9 +157,7 @@ class _ChatScreenState extends State<ChatScreen> {
         _chatController.messages[index].copyWith(previewData: previewData);
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      setState(() {
-        _chatController.messages[index] = updatedMessage;
-      });
+      _chatController.messages[index] = updatedMessage;
     });
   }
 
@@ -233,7 +235,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           color: Colors.black,
                         ),
                         inputBackgroundColor: greyColor),
-                    messages: _chatController.messages,
+                    messages: _messages,
                     onAttachmentPressed: _handleAtachmentPressed,
                     onMessageTap: _handleMessageTap,
                     onPreviewDataFetched: _handlePreviewDataFetched,

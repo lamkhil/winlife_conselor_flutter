@@ -258,6 +258,7 @@ class _BookedScreenState extends State<BookedScreen> {
                                     await _chatController.createDialog(
                                         int.parse(args['qb'].toString()));
                                     Map<String, dynamic> data = {
+                                      'type': args['type'],
                                       'dialogId': _chatController.dialog!.id!,
                                     };
                                     FCM.send(args['fcm'], data);
