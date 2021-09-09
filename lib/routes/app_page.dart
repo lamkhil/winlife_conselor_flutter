@@ -8,6 +8,7 @@ import 'package:winlife_conselor_flutter/screens/auth/otppage.dart';
 import 'package:winlife_conselor_flutter/screens/auth/registerSocialPage.dart';
 import 'package:winlife_conselor_flutter/screens/auth/registerpage.dart';
 import 'package:winlife_conselor_flutter/screens/main/dashboard.dart';
+import 'package:winlife_conselor_flutter/screens/main/service/booked_screen.dart';
 import 'package:winlife_conselor_flutter/screens/splashscreen.dart';
 import 'package:winlife_conselor_flutter/screens/webview.dart';
 
@@ -47,5 +48,6 @@ class AppPages {
         page: () => DashboardPage(),
         binding: MainBindings()),
     GetPage(name: Routes.WEBVIEW, page: () => WebViewPage()),
+    GetPage(name: Routes.BOOKEDSCREEN, page: () => BookedScreen()),
   ];
 }
