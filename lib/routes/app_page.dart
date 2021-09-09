@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:winlife_conselor_flutter/bindings/chat_bindings.dart';
 import 'package:winlife_conselor_flutter/bindings/main_binding.dart';
+import 'package:winlife_conselor_flutter/bindings/rtc_binding.dart';
 import 'package:winlife_conselor_flutter/routes/app_routes.dart';
 import 'package:winlife_conselor_flutter/screens/auth/landingpage.dart';
 import 'package:winlife_conselor_flutter/screens/auth/loginpage.dart';
@@ -9,6 +11,8 @@ import 'package:winlife_conselor_flutter/screens/auth/registerSocialPage.dart';
 import 'package:winlife_conselor_flutter/screens/auth/registerpage.dart';
 import 'package:winlife_conselor_flutter/screens/main/dashboard.dart';
 import 'package:winlife_conselor_flutter/screens/main/service/booked_screen.dart';
+import 'package:winlife_conselor_flutter/screens/main/service/type/call_screen.dart';
+import 'package:winlife_conselor_flutter/screens/main/service/type/chat_screen.dart';
 import 'package:winlife_conselor_flutter/screens/splashscreen.dart';
 import 'package:winlife_conselor_flutter/screens/webview.dart';
 
@@ -48,6 +52,19 @@ class AppPages {
         page: () => DashboardPage(),
         binding: MainBindings()),
     GetPage(name: Routes.WEBVIEW, page: () => WebViewPage()),
-    GetPage(name: Routes.BOOKEDSCREEN, page: () => BookedScreen()),
+    GetPage(
+        name: Routes.BOOKEDSCREENCALL,
+        page: () => BookedScreen(),
+        binding: RTCBindings()),
+    GetPage(
+        name: Routes.BOOKEDSCREENVIDCALL,
+        page: () => BookedScreen(),
+        binding: RTCBindings()),
+    GetPage(
+        name: Routes.BOOKEDSCREENCHAT,
+        page: () => BookedScreen(),
+        binding: ChatBindings()),
+    GetPage(name: Routes.CALLSCREEN, page: () => CallScreen()),
+    GetPage(name: Routes.CHATSCREEN, page: () => ChatScreen()),
   ];
 }

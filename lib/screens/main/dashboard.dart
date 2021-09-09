@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:winlife_conselor_flutter/constant/color.dart';
 import 'package:winlife_conselor_flutter/controller/auth_controller.dart';
 import 'package:winlife_conselor_flutter/data/provider/FCM.dart';
+import 'package:winlife_conselor_flutter/routes/app_routes.dart';
 import 'package:winlife_conselor_flutter/screens/main/Frame/history.dart';
 import 'package:winlife_conselor_flutter/screens/main/Frame/home.dart';
 import 'package:winlife_conselor_flutter/screens/main/Frame/profil.dart';
@@ -30,10 +33,26 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final AuthController _authController = Get.find();
 
+  StreamSubscription<RemoteMessage>? onMessegeSub;
+
   @override
   void initState() {
     fcmInit();
-
+    onMessegeSub = FCM.onMessage.listen((RemoteMessage message) {
+      switch (message.data['type']) {
+        case 'chat':
+          Get.toNamed(Routes.BOOKEDSCREENCHAT);
+          break;
+        case 'call':
+          Get.toNamed(Routes.BOOKEDSCREENCALL);
+          break;
+        case 'vidcall':
+          break;
+        case 'meet':
+          break;
+        default:
+      }
+    });
     super.initState();
   }
 
@@ -43,11 +62,13 @@ class _DashboardPageState extends State<DashboardPage> {
     FCM.messaging.onTokenRefresh.listen((event) {
       FCM.saveTokenToDatabase(event, _authController.user.email);
     });
-    FCM.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        customDialog(context, message.data['title'], message.data['body']);
-      }
-    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    onMessegeSub!.cancel();
+    super.dispose();
   }
 
   @override

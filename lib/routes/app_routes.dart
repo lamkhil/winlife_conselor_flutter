@@ -9,5 +9,9 @@ abstract class Routes {
   static const LANDING = '/landing';
   static const OTP = '/otp';
   static const WEBVIEW = '/webview';
-  static const BOOKEDSCREEN = '/bookedscreen';
+  static const BOOKEDSCREENCALL = '/bookedscreencall';
+  static const BOOKEDSCREENCHAT = '/bookedscreencchat';
+  static const BOOKEDSCREENVIDCALL = '/bookedscreenvidcall';
+  static const CALLSCREEN = '/callscreen';
+  static const CHATSCREEN = '/chatscreen';
 }
